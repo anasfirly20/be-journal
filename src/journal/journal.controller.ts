@@ -1,8 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CreateJournalDto } from './dto/create-journal.dto';
+import { UpdateJournalDto } from './dto/update-journal.dto';
+
 import { JournalService } from './journal.service';
 
 @ApiTags('Journals')
@@ -24,5 +35,41 @@ export class JournalController {
   })
   findAll() {
     return this.journalService.findAll();
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get journal entry by id',
+  })
+  findOne(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
+    return this.journalService.findOne(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update journal entry',
+  })
+  update(
+    @Param('id', ParseIntPipe)
+    id: number,
+
+    @Body()
+    dto: UpdateJournalDto,
+  ) {
+    return this.journalService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete journal entry',
+  })
+  remove(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
+    return this.journalService.remove(id);
   }
 }
