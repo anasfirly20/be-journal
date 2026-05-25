@@ -37,7 +37,7 @@ export class CreateJournalDto {
   workerName!: string;
 
   @ApiProperty({
-    example: '2026-05-25',
+    example: '2026-05-20T21:00:00.000Z',
   })
   @IsDateString()
   performedAt!: string;

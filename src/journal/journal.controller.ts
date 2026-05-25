@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -15,6 +16,7 @@ import { CreateJournalDto } from './dto/create-journal.dto';
 import { UpdateJournalDto } from './dto/update-journal.dto';
 
 import { JournalService } from './journal.service';
+import { GetJournalsDto } from './dto/get-journals.dto';
 
 @ApiTags('Journals')
 @Controller('journals')
@@ -33,8 +35,9 @@ export class JournalController {
   @ApiOperation({
     summary: 'Get all journal entries',
   })
-  findAll() {
-    return this.journalService.findAll();
+  @Get()
+  findAll(@Query() query: GetJournalsDto) {
+    return this.journalService.findAll(query);
   }
 
   @Get(':id')

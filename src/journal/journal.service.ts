@@ -4,6 +4,8 @@ import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateJournalDto } from './dto/create-journal.dto';
 import { UpdateJournalDto } from './dto/update-journal.dto';
+import { GetJournalsDto } from './dto/get-journals.dto';
+import { Prisma } from 'generated/prisma/client';
 
 @Injectable()
 export class JournalService {
@@ -11,19 +13,51 @@ export class JournalService {
 
   create(dto: CreateJournalDto) {
     return this.prisma.journal.create({
-      data: dto,
+      data: {
+        ...dto,
+        performedAt: new Date(dto.performedAt),
+      },
       include: {
         workType: true,
       },
     });
   }
 
-  findAll() {
+  findAll(query: GetJournalsDto) {
+    const { date, from, to } = query;
+
+    const where: Prisma.JournalWhereInput = {};
+
+    if (date) {
+      const start = new Date(date);
+      const end = new Date(date);
+      end.setHours(23, 59, 59, 999);
+
+      where.performedAt = {
+        gte: start,
+        lte: end,
+      };
+    }
+
+    if (from || to) {
+      where.performedAt = {};
+
+      if (from) {
+        where.performedAt.gte = new Date(from);
+      }
+
+      if (to) {
+        const end = new Date(to);
+        end.setHours(23, 59, 59, 999);
+        where.performedAt.lte = end;
+      }
+    }
+
     return this.prisma.journal.findMany({
+      where,
       include: {
         workType: true,
       },
-
       orderBy: {
         performedAt: 'desc',
       },
@@ -35,7 +69,6 @@ export class JournalService {
       where: {
         id,
       },
-
       include: {
         workType: true,
       },
@@ -55,9 +88,10 @@ export class JournalService {
       where: {
         id,
       },
-
-      data: dto,
-
+      data: {
+        ...dto,
+        performedAt: dto.performedAt ? new Date(dto.performedAt) : undefined,
+      },
       include: {
         workType: true,
       },
