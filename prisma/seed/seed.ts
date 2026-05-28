@@ -29,23 +29,38 @@ async function main() {
 
   const workTypes = await prisma.workType.findMany();
 
+  const workerNames = [
+    'Иван Петров',
+    'Сергей Иванов',
+    'Алексей Смирнов',
+    'Дмитрий Кузнецов',
+    'Максим Волков',
+  ];
+
+  const units = [Unit.M2, Unit.M3];
+
+  const journals = Array.from({ length: 40 }).map(() => {
+    const randomWorkType =
+      workTypes[Math.floor(Math.random() * workTypes.length)];
+
+    const randomWorker =
+      workerNames[Math.floor(Math.random() * workerNames.length)];
+
+    const randomUnit = units[Math.floor(Math.random() * units.length)];
+    const randomVolume = Math.floor(Math.random() * 50) + 1;
+    const randomDay = Math.floor(Math.random() * 28) + 1;
+
+    return {
+      workTypeId: randomWorkType.id,
+      volume: randomVolume,
+      unit: randomUnit,
+      workerName: randomWorker,
+      performedAt: new Date(`2026-05-${String(randomDay).padStart(2, '0')}`),
+    };
+  });
+
   await prisma.journal.createMany({
-    data: [
-      {
-        workTypeId: workTypes[0].id,
-        volume: 24,
-        unit: Unit.M3,
-        workerName: 'Иван Петров',
-        performedAt: new Date('2026-05-20'),
-      },
-      {
-        workTypeId: workTypes[1].id,
-        volume: 12,
-        unit: Unit.M2,
-        workerName: 'Сергей Иванов',
-        performedAt: new Date('2026-05-21'),
-      },
-    ],
+    data: journals,
   });
 
   console.log('Seed completed');
