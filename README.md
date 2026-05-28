@@ -59,6 +59,12 @@ Backend API for the construction work journal system built with NestJS, Prisma O
 | PATCH  | `/journals/:id` | Update journal entry    |
 | DELETE | `/journals/:id` | Delete journal entry    |
 
+### Work Types
+
+| Method | Endpoint      | Description        |
+| ------ | ------------- | ------------------ |
+| GET    | `/work-types` | Get all work types |
+
 ## Query Examples
 
 ### Filter by Date Range
