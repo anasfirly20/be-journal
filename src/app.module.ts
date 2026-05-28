@@ -4,9 +4,19 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { JournalModule } from './journal/journal.module';
 import { WorkTypeModule } from './work-type/work-type.module';
+import { ConfigModule } from '@nestjs/config';
+import { validateConfig } from './common/config/env.config';
 
 @Module({
-  imports: [PrismaModule, JournalModule, WorkTypeModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: (config) => validateConfig(config),
+    }),
+    PrismaModule,
+    JournalModule,
+    WorkTypeModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
