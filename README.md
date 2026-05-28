@@ -144,9 +144,32 @@ src/
 │   ├── journal.service.ts
 │   └── journal.module.ts
 │
+├── work-type/
+│   ├── work-type.controller.ts
+│   ├── work-type.service.ts
+│   └── work-type.module.ts
+│
 ├── prisma/
 │   ├── prisma.module.ts
 │   └── prisma.service.ts
 │
 └── main.ts
 ```
+
+## Why This Stack
+
+### NestJS
+
+Chosen because it provides a clean modular architecture, built-in dependency injection, DTO validation support, and good scalability for REST API applications.
+
+### Prisma ORM
+
+Used for type-safe database access, convenient migrations, and simple work with relational data.
+
+### Swagger
+
+Used for automatic API documentation and easier testing of endpoints during development.
+
+### Docker Compose
+
+Used to simplify local MySQL database setup and make project запуск faster with a single command.
