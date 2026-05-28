@@ -24,20 +24,9 @@ export class JournalService {
   }
 
   findAll(query: GetJournalsDto) {
-    const { date, from, to } = query;
+    const { from, to, workTypeId, workerName } = query;
 
     const where: Prisma.JournalWhereInput = {};
-
-    if (date) {
-      const start = new Date(date);
-      const end = new Date(date);
-      end.setHours(23, 59, 59, 999);
-
-      where.performedAt = {
-        gte: start,
-        lte: end,
-      };
-    }
 
     if (from || to) {
       where.performedAt = {};
@@ -48,9 +37,21 @@ export class JournalService {
 
       if (to) {
         const end = new Date(to);
+
         end.setHours(23, 59, 59, 999);
+
         where.performedAt.lte = end;
       }
+    }
+
+    if (workTypeId) {
+      where.workTypeId = Number(workTypeId);
+    }
+
+    if (workerName) {
+      where.workerName = {
+        contains: workerName,
+      };
     }
 
     return this.prisma.journal.findMany({

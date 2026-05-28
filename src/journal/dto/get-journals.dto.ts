@@ -1,15 +1,8 @@
-import { IsDateString, IsOptional } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetJournalsDto {
-  @ApiPropertyOptional({
-    example: '2026-05-25',
-  })
-  @IsOptional()
-  @IsDateString()
-  date?: string;
-
   @ApiPropertyOptional({
     example: '2026-05-01',
   })
@@ -23,4 +16,17 @@ export class GetJournalsDto {
   @IsOptional()
   @IsDateString()
   to?: string;
+
+  @ApiPropertyOptional({
+    example: 1,
+  })
+  @IsOptional()
+  workTypeId?: number;
+
+  @ApiPropertyOptional({
+    example: 'Иван',
+  })
+  @IsOptional()
+  @IsString()
+  workerName?: string;
 }
